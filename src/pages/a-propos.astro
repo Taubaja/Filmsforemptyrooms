@@ -1,0 +1,81 @@
+---
+import Layout from '../layouts/Layout.astro';
+import studio from '../data/studio.json';
+---
+
+<Layout title={`À propos — ${studio.name}`}>
+  <div class="contact-page">
+    <div class="contact-layout">
+      <nav class="contact-nav">
+        <button class="contact-nav__item is-active" data-tab="about">À propos</button>
+        <button class="contact-nav__item" data-tab="awards">Prix</button>
+        <button class="contact-nav__item" data-tab="offices">Bureau</button>
+        <button class="contact-nav__item" data-tab="social">Social</button>
+      </nav>
+
+      <div class="contact-content">
+        <div class="contact-tab is-active" data-tab-content="about">
+          <div class="contact-block">
+            <p class="contact-block__label">{studio.name}</p>
+            <p class="contact-block__text">{studio.tagline}</p>
+          </div>
+          {studio.aboutText && (
+            <div class="contact-block">
+              {studio.aboutText.split('\n').filter(p => p.trim()).map((p) => (
+                <p class="contact-block__text" style="margin-bottom:10px;">{p.trim()}</p>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div class="contact-tab" data-tab-content="awards">
+          <div class="contact-block">
+            <p class="contact-block__label">Prix et sélections</p>
+            <p class="contact-block__text">{studio.awards}</p>
+          </div>
+        </div>
+
+        <div class="contact-tab" data-tab-content="offices">
+          {studio.offices.map((office) => (
+            <div class="contact-block">
+              <p class="contact-block__label">{office.label}</p>
+              <p class="contact-block__text">{office.address}</p>
+              <a class="contact-block__link" href={`mailto:${office.email}`}>{office.email}</a>
+              <a class="contact-block__link" href={`tel:${office.tel}`}>{office.tel}</a>
+            </div>
+          ))}
+        </div>
+
+        <div class="contact-tab" data-tab-content="social">
+          <div class="contact-block">
+            <p class="contact-block__label">Follow us</p>
+            <a class="contact-block__link" href={studio.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+            {studio.linkedin && <a class="contact-block__link" href={studio.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>}
+          </div>
+          <div class="contact-block">
+            <p class="contact-block__label">Newsletter</p>
+            <form class="newsletter-form" action={`mailto:${studio.email}`} method="post" enctype="text/plain">
+              <input class="newsletter-form__input" type="email" name="email" placeholder="Email" required />
+              <button class="newsletter-form__btn" type="submit">Send</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const tabs = document.querySelectorAll('[data-tab]');
+  const contents = document.querySelectorAll('[data-tab-content]');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('is-active'));
+      tab.classList.add('is-active');
+      contents.forEach(c => c.classList.remove('is-active'));
+      const target = document.querySelector(`[data-tab-content="${tab.dataset.tab}"]`);
+      if (target) target.classList.add('is-active');
+    });
+  });
+</script>

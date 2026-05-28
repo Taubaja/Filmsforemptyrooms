@@ -1,0 +1,98 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import directors from '../../../data/directors.json';
+
+export function getStaticPaths() {
+  return directors.flatMap((d) =>
+    d.films.map((f) => ({
+      params: { slug: d.slug, film: f.slug },
+    }))
+  );
+}
+
+const { slug, film: filmSlug } = Astro.params;
+const director = directors.find((d) => d.slug === slug);
+
+if (!director) {
+  return Astro.redirect('/404');
+}
+
+const film = director.films.find((f) => f.slug === filmSlug);
+
+if (!film) {
+  return Astro.redirect('/404');
+}
+
+// Related works: 3 adjacent films from same director
+const filmIndex = director.films.indexOf(film);
+const allButCurrent = director.films.filter((_, i) => i !== filmIndex);
+const related = allButCurrent.slice(0, 3);
+---
+
+<Layout title={`${film.client ? film.client + ' — ' : ''}${film.title} — ${director.name} — Films for empty rooms`}>
+  <div class="project-page">
+    <a href={`/#${director.slug}`} class="project-page__back">&larr; {director.name}</a>
+
+    <div class="project-page__player">
+      <iframe
+        src={`https://player.vimeo.com/video/${film.vimeoId}?h=0&title=0&byline=0&portrait=0`}
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <h1 class="project-page__title">
+      {film.client ? `${film.client} — ` : ''}{film.title}
+    </h1>
+    <a href={`/#${director.slug}`} class="project-page__director">{director.name}</a>
+
+    {film.synopsis && (
+      <p class="project-page__synopsis">{film.synopsis}</p>
+    )}
+
+    {film.client && (
+      <p class="project-page__client">Client : {film.client}</p>
+    )}
+
+    {film.credits && film.credits.length > 0 && (
+      <div class="project-page__credits">
+        <h2 class="project-page__section-title">Credits</h2>
+        {film.credits.map((c) => (
+          <p class="project-page__credit"><span class="project-page__credit-role">{c.role}</span> : {c.name}</p>
+        ))}
+      </div>
+    )}
+
+    {film.stills && film.stills.length > 0 && (
+      <div style="margin-top: 32px;">
+        <h2 class="project-page__section-title">Galerie</h2>
+        <div class="filmography-strip" data-strip data-lenis-prevent style="height: 240px;">
+          {film.stills.map((still, i) => (
+            <img src={still} alt={`${film.title} — still ${i + 1}`} loading="lazy" draggable="false" style="height:240px; width:auto;" />
+          ))}
+        </div>
+      </div>
+    )}
+
+    {related.length > 0 && (
+      <div class="related-works">
+        <h2 class="related-works__title">Projets lies</h2>
+        <div class="related-works__strip" data-strip data-lenis-prevent>
+          {related.map((r) => (
+            <a href={`/talents/${director.slug}/${r.slug}`}>
+              <img
+                src={r.thumbnail}
+                alt={`${director.name} — ${r.client || ''} — ${r.title}`}
+                loading="lazy"
+                draggable="false"
+              />
+              <p class="related-works__strip-label">
+                {r.client ? `${r.client} — ` : ''}{r.title}
+              </p>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+</Layout>

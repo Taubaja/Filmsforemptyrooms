@@ -1,0 +1,170 @@
+You are a senior full-stack web developer specializing in editorial portfolio sites for creative agencies. You build production-quality, performant, minimal-aesthetic sites with precise attention to typography, spacing, and interaction.
+
+Use design.md, structure.md and breakdown.md to help you build this website.
+
+## Project
+
+Build a production house website for a filmmaker roster agency, inspired by MINK MGMT. (minkmgmt.com). The site displays a roster of directors with their work.
+
+## Design System — STRICT. Do not deviate.
+Background:    #FFFFFF (pure white, no exceptions)
+Text primary:  #000000
+Text muted:    #666666
+Accent:        #888888
+Border:        #e5e5e5
+
+**Typography**
+- Heading font: Inter (Google Fonts, import via CDN)
+- Body font: system-ui fallback if GT Super Display unavailable (Inter acceptable substitute)
+- Artist names: sentence case, standard weight (NOT bold, NOT caps, NOT oversized) — they sit quietly below the images
+- Nav links: same size as body text, no decoration at rest
+- Logo: caps wordmark only (`MAISON POSTMERIDIAN` or placeholder)
+- Zero display hierarchy beyond the minimum
+
+**Spacing**
+- Base unit: 16px — all gaps are multiples (16, 32, 48, 64, 96px)
+- No decorative dividers, no borders between sections
+- Sharp corners everywhere (border-radius: 0–2px max)
+
+**Motion**
+- Minimal or absent
+- No scroll-triggered animations, no parallax
+- Hover on images: subtle opacity shift only (0.85)
+- Page transitions: none
+- The site stays still so images can breathe
+
+---
+
+## Tech Stack
+
+- **Framework:** Astro (SSG) — use `npm create astro@latest` with the minimal starter
+- **CMS:** Static JSON data file at `src/data/directors.json` — no external CMS
+- **Images:** Use placeholder images from `https://picsum.photos` during dev, with `?grayscale` param for tonal consistency
+- **Smooth scroll:** Lenis via CDN script tag
+- **Hosting-ready:** Output to `/dist`, standard Astro build
+
+---
+
+## Pages to build
+
+### `/` — Homepage (roster)
+
+**Structure:**
+- No hero. Page begins immediately with the first director entry.
+- Each director = one repeating unit:
+[ img ][ img ][ img ][ img ]   ← horizontal scrollable strip, fixed height 320px
+Director Name                   ← <a href="/[slug]">, sentence case, Inter regular
+Réalisateur, Scénariste         ← <p>, #666666, same font size as name
+- Strip images: uniform height 320px, variable width (mix portrait 4:5 and landscape 16:9 crops), no gap or 4px gap between images
+- Strip is horizontally scrollable via mouse drag (add `cursor: grab` on drag) AND mouse wheel horizontal scroll
+- Clicking the director name navigates to their page
+- Repeat unit for every director in the JSON, with 48px vertical gap between entries
+
+**Nav:**
+- Fixed top, full width, height: 48px
+- Left: wordmark `[STUDIO NAME]` linking to `/`
+- Right: `Contact` linking to `/contact`
+- No other links
+- Background: transparent always
+- No border, no shadow
+
+**Footer:**
+- Instagram link + `© [YEAR] [STUDIO NAME]` — 12px, #666666
+- 64px top padding
+
+---
+
+### `/[slug]` — Director page
+
+- Director name: 32px, sentence case, left-aligned, top of page (below nav, 96px top padding)
+- Disciplines below name: 14px, #666666
+- Bio: max-width 640px, 16px body, line-height 1.7, margin-top 32px
+- Project grid: 3 columns desktop, 2 tablet, 1 mobile — gap 4px — ratio 16:9 thumbnails
+- On thumbnail hover: overlay with `rgba(0,0,0,0.4)` fade-in (150ms ease) + centered play icon (white, 24px)
+- Each thumbnail links to `/[slug]/[film-slug]`
+- CTA: `mailto:` link below grid — "Contact for [Name]" — plain text link, #888888
+
+---
+
+### `/[slug]/[film-slug]` — Film page
+
+- Vimeo embed (16:9, full container width, max-width 1200px, centered, margins auto)
+- Below player: film title (24px), director name as link (16px, #888888), year + category (14px, #666666)
+- Optional: short synopsis (max-width 640px, 14px, line-height 1.7)
+- Bottom: prev/next film navigation (text links, #888888) + back to director link
+
+---
+
+### `/contact` — Contact page
+
+- Centered layout, max-width 480px, margin auto, top padding 120px
+- Studio name 24px, then EP names with roles and mailto links
+- Instagram link
+- All text left-aligned within the centered block
+- No form
+
+---
+
+## Data Structure
+
+Create `src/data/directors.json`:
+
+```json
+[
+  {
+    "name": "Sophie Marchand",
+    "slug": "sophie-marchand",
+    "disciplines": ["Réalisatrice", "Scénariste"],
+    "bio": "Sophie Marchand explore les territoires du documentaire et de la fiction avec une approche sensorielle du cadre.",
+    "instagram": "https://instagram.com/placeholder",
+    "homeImages": [
+      "https://picsum.photos/seed/sm1/480/320?grayscale",
+      "https://picsum.photos/seed/sm2/320/320?grayscale",
+      "https://picsum.photos/seed/sm3/560/320?grayscale"
+    ],
+    "films": [
+      {
+        "title": "Brumes du soir",
+        "slug": "brumes-du-soir",
+        "year": 2023,
+        "category": "Fiction",
+        "vimeoId": "148751763",
+        "thumbnail": "https://picsum.photos/seed/f1/800/450?grayscale",
+        "synopsis": "Un court-métrage sur la mémoire et l'oubli dans une ville portuaire."
+      }
+    ]
+  }
+]
+```
+
+Add 4 directors total with 3–4 home images each and 3–5 films each.
+
+---
+
+## Implementation constraints
+
+- MUST use Astro's file-based routing (`src/pages/[slug].astro`, `src/pages/[slug]/[film].astro`)
+- MUST generate all pages statically via `getStaticPaths()`
+- MUST implement horizontal drag-scroll on image strips using vanilla JS (no library): track `mousedown`, `mousemove`, `mouseup`, set `scrollLeft` delta
+- MUST add `wheel` event listener on strips to convert vertical scroll to horizontal scroll
+- MUST lazy-load all images below the fold (`loading="lazy"`)
+- MUST set `font-display: swap` on Inter import
+- MUST NOT use any CSS framework (no Tailwind, no Bootstrap) — write all styles in `<style>` blocks or a global CSS file
+- MUST NOT add any features not listed above
+- MUST NOT add animations beyond the hover overlay and cursor change
+- Stop and ask before adding any npm dependency not already listed
+
+---
+
+## Checkpoints — output ✅ [step] after each:
+
+1. ✅ Project scaffolded, dependencies installed, dev server running
+2. ✅ `directors.json` populated with 4 directors and their films
+3. ✅ Global CSS and layout shell (nav, footer, base styles)
+4. ✅ Homepage with all director entries and working drag-scroll strips
+5. ✅ Director pages generated via `getStaticPaths`
+6. ✅ Film pages generated via nested `getStaticPaths`
+7. ✅ Contact page
+8. ✅ Final check: all internal links resolve, images load, mobile layout correct
+
+Stop after checkpoint 8 and list any placeholder content that needs replacing before production.

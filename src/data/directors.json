@@ -1,0 +1,256 @@
+[
+  {
+    "name": "Sophie Marchand",
+    "slug": "sophie-marchand",
+    "ogImage": "https://filmsforemptyrooms.com/og/sophie-marchand.png",
+    "reelVimeoId": "148751763",
+    "cvUrl": "/cv/sophie-marchand.pdf",
+    "disciplines": ["Réalisatrice", "Scénariste"],
+    "clients": ["Arte France", "Canal+", "CNC"],
+    "bio": "Sophie Marchand explore les territoires du documentaire et de la fiction avec une approche sensorielle du cadre. Son travail questionne la mémoire collective et les paysages intérieurs à travers une esthétique de la lumière naturelle.\n\nDiplômée de la Fémis, elle a reçu le Prix du Meilleur Court Métrage à Clermont-Ferrand en 2022. Ses films ont été sélectionnés à Cannes, Toronto et Rotterdam.\n\nElle développe actuellement son premier long métrage, produit par Films for Empty Rooms.",
+    "instagram": "https://instagram.com/sophiemarchand",
+    "homeImages": [
+      "https://picsum.photos/seed/sm1/480/320?grayscale",
+      "https://picsum.photos/seed/sm2/320/320?grayscale",
+      "https://picsum.photos/seed/sm3/560/320?grayscale",
+      "https://picsum.photos/seed/sm4/400/320?grayscale"
+    ],
+    "films": [
+      {
+        "title": "Brumes du soir",
+        "slug": "brumes-du-soir",
+        "year": 2023,
+        "category": "Fiction",
+        "client": "Arte France",
+        "vimeoId": "148751763",
+        "thumbnail": "https://picsum.photos/seed/f1/800/450?grayscale",
+        "synopsis": "Un court-métrage sur la mémoire et l'oubli dans une ville portuaire, où les brumes matinales deviennent le territoire d'une quête intime.",
+        "credits": [
+          { "role": "Directeur de la photographie", "name": "Jean Morel" },
+          { "role": "Monteuse", "name": "Alice Berg" },
+          { "role": "Compositeur", "name": "Thomas Roux" }
+        ],
+        "stills": [
+          "https://picsum.photos/seed/bs1/1200/800?grayscale",
+          "https://picsum.photos/seed/bs2/1200/800?grayscale",
+          "https://picsum.photos/seed/bs3/1200/800?grayscale"
+        ]
+      },
+      {
+        "title": "La dérive des continents",
+        "slug": "la-derive-des-continents",
+        "year": 2022,
+        "category": "Documentaire",
+        "client": "Canal+",
+        "vimeoId": "148751763",
+        "thumbnail": "https://picsum.photos/seed/f2/800/450?grayscale",
+        "synopsis": "Aux confins de l'Arctique, une expédition scientifique devient le théâtre d'une réflexion sur l'isolement et la résilience humaine."
+      },
+      {
+        "title": "Échos souterrains",
+        "slug": "echos-souterrains",
+        "year": 2021,
+        "category": "Fiction",
+        "client": "Arte France",
+        "vimeoId": "148751763",
+        "thumbnail": "https://picsum.photos/seed/f3/800/450?grayscale",
+        "synopsis": "Dans les couloirs du métro parisien, une rencontre fortuite entre deux inconnus déclenche une série d'événements qui redessine leur perception du temps."
+      },
+      {
+        "title": "Les saisons de cendre",
+        "slug": "les-saisons-de-cendre",
+        "year": 2020,
+        "category": "Expérimental",
+        "client": "CNC",
+        "vimeoId": "148751763",
+        "thumbnail": "https://picsum.photos/seed/f4/800/450?grayscale",
+        "synopsis": "Une traversée visuelle des paysages volcaniques islandais, où la matière en fusion dialogue avec la glace millénaire."
+      }
+    ]
+  },
+  {
+    "name": "Lucas Delcourt",
+    "slug": "lucas-delcourt",
+    "ogImage": null,
+    "reelVimeoId": "148751763",
+    "cvUrl": "/cv/lucas-delcourt.pdf",
+    "disciplines": ["Réalisateur", "Photographe"],
+    "clients": ["France Télévisions", "Canal+", "Sony Music", "CNC", "Arte France"],
+    "bio": "Lucas Delcourt navigue entre la photographie documentaire et le cinéma avec une obsession pour la texture du réel. Ses images, qu'elles soient fixes ou en mouvement, capturent l'épaisseur du temps dans les gestes quotidiens.\n\nAncien pensionnaire de la Villa Médicis, il a exposé à la BNF et au Jeu de Paume. Son travail photographique est représenté par la galerie Les Filles du Calvaire.\n\nIl prépare actuellement une série documentaire pour France Télévisions sur les territoires ruraux européens.",
+    "instagram": "https://instagram.com/lucasdelcourt",
+    "homeImages": [
+      "https://picsum.photos/seed/ld1/500/320?grayscale",
+      "https://picsum.photos/seed/ld2/350/320?grayscale",
+      "https://picsum.photos/seed/ld3/520/320?grayscale"
+    ],
+    "films": [
+      {
+        "title": "Terres promises",
+        "slug": "terres-promises",
+        "year": 2024,
+        "category": "Documentaire",
+        "client": "France Télévisions",
+        "vimeoId": "148751763",
+        "thumbnail": "https://picsum.photos/seed/ldf1/800/450?grayscale",
+        "synopsis": "Trois familles, trois continents, un même rêve : celui d'un chez-soi. Un triptyque documentaire sur l'exil volontaire au XXIe siècle.",
+        "credits": [
+          { "role": "Directrice de la photographie", "name": "Sarah Klein" },
+          { "role": "Monteur", "name": "David Petit" }
+        ]
+      },
+      {
+        "title": "L'ombre des tours",
+        "slug": "l-ombre-des-tours",
+        "year": 2022,
+        "category": "Fiction",
+        "client": "Canal+",
+        "vimeoId": "148751763",
+        "thumbnail": "https://picsum.photos/seed/ldf2/800/450?grayscale",
+        "synopsis": "Dans une cité de banlieue promise à la démolition, un adolescent filme les derniers jours de son quartier avec la caméra de son père disparu."
+      },
+      {
+        "title": "Battements",
+        "slug": "battements",
+        "year": 2021,
+        "category": "Clip",
+        "client": "Sony Music",
+        "vimeoId": "148751763",
+        "thumbnail": "https://picsum.photos/seed/ldf3/800/450?grayscale",
+        "synopsis": "Un voyage pulsatif à travers les nuits électriques de Berlin, tourné en une seule prise de 7 minutes."
+      },
+      {
+        "title": "Mécanique du silence",
+        "slug": "mecanique-du-silence",
+        "year": 2020,
+        "category": "Expérimental",
+        "client": "CNC",
+        "vimeoId": "148751763",
+        "thumbnail": "https://picsum.photos/seed/ldf4/800/450?grayscale",
+        "synopsis": "Une exploration des usines désaffectées du nord de la France, où le silence a remplacé le vacarme des machines."
+      },
+      {
+        "title": "Lettres à personne",
+        "slug": "lettres-a-personne",
+        "year": 2019,
+        "category": "Fiction",
+        "client": "Arte France",
+        "vimeoId": "148751763",
+        "thumbnail": "https://picsum.photos/seed/ldf5/800/450?grayscale",
+        "synopsis": "Un homme écrit chaque jour à un destinataire inconnu. Ces lettres jamais postées deviennent le journal d'une ville qui change."
+      }
+    ]
+  },
+  {
+    "name": "Emma Lindqvist",
+    "slug": "emma-lindqvist",
+    "ogImage": null,
+    "reelVimeoId": null,
+    "cvUrl": null,
+    "disciplines": ["Réalisatrice", "Directrice de la photographie"],
+    "clients": ["SVT", "Canal+", "Arte France"],
+    "bio": "Emma Lindqvist façonne des images où la lumière naturelle devient personnage. Formée à l'école documentaire scandinave, elle apporte à chaque projet une rigueur du cadre héritée de la photographie argentique.\n\nSon premier long métrage Solstice a reçu le Prix de la Meilleure Photographie au festival de Göteborg. Elle collabore régulièrement avec le chorégraphe suédois Alexander Ekman.\n\nBasée entre Stockholm et Paris, elle est représentée par Films for Empty Rooms depuis 2021.",
+    "instagram": "https://instagram.com/emmalindqvist",
+    "homeImages": [
+      "https://picsum.photos/seed/el1/440/320?grayscale",
+      "https://picsum.photos/seed/el2/370/320?grayscale",
+      "https://picsum.photos/seed/el3/540/320?grayscale",
+      "https://picsum.photos/seed/el4/380/320?grayscale"
+    ],
+    "films": [
+      {
+        "title": "Solstice",
+        "slug": "solstice",
+        "year": 2024,
+        "category": "Fiction",
+        "client": "SVT / Canal+",
+        "vimeoId": "148751763",
+        "thumbnail": "https://picsum.photos/seed/elf1/800/450?grayscale",
+        "synopsis": "La plus longue journée de l'année dans un village du Grand Nord. Six personnages, six façons d'habiter la lumière infinie.",
+        "stills": [
+          "https://picsum.photos/seed/sol1/1200/800?grayscale",
+          "https://picsum.photos/seed/sol2/1200/800?grayscale",
+          "https://picsum.photos/seed/sol3/1200/800?grayscale",
+          "https://picsum.photos/seed/sol4/1200/800?grayscale"
+        ]
+      },
+      {
+        "title": "La traversée du fjord",
+        "slug": "la-traversee-du-fjord",
+        "year": 2022,
+        "category": "Documentaire",
+        "client": "SVT",
+        "vimeoId": "148751763",
+        "thumbnail": "https://picsum.photos/seed/elf2/800/450?grayscale",
+        "synopsis": "Chaque hiver, un homme traverse le fjord gelé pour ravitailler un hameau isolé. Portrait d'une solitude choisie."
+      },
+      {
+        "title": "Corps migrants",
+        "slug": "corps-migrants",
+        "year": 2021,
+        "category": "Documentaire",
+        "client": "Arte France",
+        "vimeoId": "148751763",
+        "thumbnail": "https://picsum.photos/seed/elf3/800/450?grayscale",
+        "synopsis": "Une série de portraits dansés qui interrogent la mémoire du corps en exil, entre perte et réinvention de soi."
+      }
+    ]
+  },
+  {
+    "name": "Karim Benali",
+    "slug": "karim-benali",
+    "ogImage": null,
+    "reelVimeoId": "148751763",
+    "cvUrl": "/cv/karim-benali.pdf",
+    "disciplines": ["Réalisateur", "Monteur"],
+    "clients": ["France Télévisions", "Canal+", "CNC", "Arte France"],
+    "bio": "Le travail de Karim Benali se situe au croisement du cinéma et des arts visuels. Monteur de formation, il construit ses films comme des architectures temporelles où passé et présent cohabitent dans le même plan.\n\nNé à Marseille, il a étudié à l'INSAS avant d'assister Claire Denis et Bertrand Bonello. Ses installations vidéo ont été présentées au Palais de Tokyo et à la Biennale de Venise.\n\nIl développe actuellement un essai documentaire sur les territoires frontaliers de la Méditerranée.",
+    "instagram": "https://instagram.com/karimbenali",
+    "homeImages": [
+      "https://picsum.photos/seed/kb1/460/320?grayscale",
+      "https://picsum.photos/seed/kb2/330/320?grayscale",
+      "https://picsum.photos/seed/kb3/510/320?grayscale"
+    ],
+    "films": [
+      {
+        "title": "Chroniques de la frontière",
+        "slug": "chroniques-de-la-frontiere",
+        "year": 2023,
+        "category": "Documentaire",
+        "client": "France Télévisions",
+        "vimeoId": "148751763",
+        "thumbnail": "https://picsum.photos/seed/kbf1/800/450?grayscale",
+        "synopsis": "Trois ans de tournage aux frontières de l'Europe. Un journal filmé qui documente les micro-histoires qui s'écrivent dans les marges."
+      },
+      {
+        "title": "Nuits blanches",
+        "slug": "nuits-blanches",
+        "year": 2022,
+        "category": "Fiction",
+        "client": "Canal+",
+        "vimeoId": "148751763",
+        "thumbnail": "https://picsum.photos/seed/kbf2/800/450?grayscale",
+        "synopsis": "Un insomniaque erre dans les rues de Marseille. Sa déambulation nocturne devient peu à peu une enquête sur sa propre disparition annoncée."
+      },
+      {
+        "title": "Le grain de la voix",
+        "slug": "le-grain-de-la-voix",
+        "year": 2021,
+        "category": "Expérimental",
+        "client": "CNC",
+        "vimeoId": "148751763",
+        "thumbnail": "https://picsum.photos/seed/kbf3/800/450?grayscale",
+        "synopsis": "Essai visuel sur la matérialité de la voix humaine, à travers les archives sonores de l'INA et des images tournées en 16mm."
+      },
+      {
+        "title": "Retours",
+        "slug": "retours",
+        "year": 2020,
+        "category": "Fiction",
+        "client": "Arte France",
+        "vimeoId": "148751763",
+        "thumbnail": "https://picsum.photos/seed/kbf4/800/450?grayscale",
+        "synopsis": "Après vingt ans d'absence, un homme retourne dans son village natal algérien. Le film suit cette redécouverte par fragments, comme on feuillette un album photo."
+      }
+    ]
+  }
+]

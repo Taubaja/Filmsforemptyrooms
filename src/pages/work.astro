@@ -1,0 +1,173 @@
+---
+import Layout from '../layouts/Layout.astro';
+import directors from '../data/directors.json';
+import WorkSection from '../components/WorkSection.astro';
+
+const allFilms = directors.flatMap((d) =>
+  d.films.map((f) => ({ ...f, directorName: d.name, directorSlug: d.slug, directorInstagram: d.instagram, directorDisciplines: d.disciplines, directorClients: [...new Set(d.films.map((x) => x.client).filter(Boolean))] }))
+).sort((a, b) => b.year - a.year);
+
+const categories = ['Tous', ...new Set(allFilms.map((f) => f.category))];
+---
+
+<Layout title="Work — Films for Empty Rooms">
+  <div class="work-page">
+    <div class="work-filters">
+      <div class="work-filters__row">
+        {categories.map((cat) => (
+          <button class={`work-filter${cat === 'Tous' ? ' is-active' : ''}`} data-filter={cat.toLowerCase()}>
+            {cat}
+          </button>
+        ))}
+      </div>
+      <div class="work-filters__row">
+        <select class="work-director-filter" id="director-filter">
+          <option value="tous">Tous les réalisateurs</option>
+          {directors.map((d) => (
+            <option value={d.slug}>{d.name}</option>
+          ))}
+        </select>
+        <span class="work-filters__spacer"></span>
+        <button class="work-sort-btn" id="sort-btn">Année ↕</button>
+        <span class="work-count" id="work-count">{allFilms.length} films</span>
+      </div>
+    </div>
+
+    <div class="work-list" id="work-list">
+      {allFilms.map((film) => (
+        <WorkSection film={film} />
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<script>
+(function() {
+  var roster = document.querySelector('.work-list');
+  if (!roster) return;
+  var sections = Array.from(roster.querySelectorAll('[data-work-section]'));
+  var countEl = document.getElementById('work-count');
+  var sortBtn = document.getElementById('sort-btn');
+  var directorFilter = document.getElementById('director-filter');
+  var sortDesc = true;
+
+  var activeCategory = 'tous';
+  var activeDirector = 'tous';
+
+  function applyFilters() {
+    var visible = 0;
+    sections.forEach(function(s) {
+      var cat = s.dataset.category.toLowerCase();
+      var dirSlug = s.dataset.director ? s.dataset.director.toLowerCase().replace(/\s+/g, '-').normalize('NFD').replace(/[̀-ͯ]/g, '') : '';
+      var matchCat = activeCategory === 'tous' || cat === activeCategory.toLowerCase();
+      var matchDir = activeDirector === 'tous' || dirSlug === activeDirector;
+      var match = matchCat && matchDir;
+      s.style.opacity = match ? '1' : '0.15';
+      s.style.pointerEvents = match ? 'auto' : 'none';
+      if (match) visible++;
+    });
+    if (countEl) countEl.textContent = visible + ' film' + (visible > 1 ? 's' : '');
+  }
+
+  // Category filters
+  document.querySelectorAll('[data-filter]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('[data-filter]').forEach(function(b) { b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      activeCategory = btn.dataset.filter;
+      applyFilters();
+    });
+  });
+
+  // Director filter
+  if (directorFilter) {
+    directorFilter.addEventListener('change', function() {
+      activeDirector = directorFilter.value;
+      applyFilters();
+    });
+  }
+
+  // Sort
+  if (sortBtn) {
+    sortBtn.addEventListener('click', function() {
+      sortDesc = !sortDesc;
+      var sorted = sections.sort(function(a, b) {
+        var ya = parseInt(a.dataset.year) || 0;
+        var yb = parseInt(b.dataset.year) || 0;
+        return sortDesc ? yb - ya : ya - yb;
+      });
+      sorted.forEach(function(s) { roster.appendChild(s); });
+      sortBtn.textContent = 'Année ' + (sortDesc ? '↓' : '↑');
+    });
+  }
+
+  // Bandeau logic — same as homepage
+  var openSection = null;
+
+  function bindClick(section) {
+    var trigger = section.querySelector('[data-work-trigger]');
+    var closeBtn = section.querySelector('[data-work-close]');
+    var panels = section.querySelector('[data-panels]');
+    var arrowLeft = section.querySelector('[data-arrow-left]');
+    var arrowRight = section.querySelector('[data-arrow-right]');
+    if (!trigger || !closeBtn || !panels || !arrowLeft || !arrowRight) return;
+
+    trigger.addEventListener('click', function() {
+      if (section.classList.contains('is-open')) { close(section); }
+      else { if (openSection && openSection !== section) close(openSection); open(section); }
+    });
+    closeBtn.addEventListener('click', function(e) { e.stopPropagation(); close(section); });
+
+    function updateArrows() {
+      var atStart = panels.scrollLeft <= 2;
+      var atEnd = panels.scrollLeft + panels.clientWidth >= panels.scrollWidth - 2;
+      arrowLeft.classList.toggle('work-section__arrow--hidden', atStart);
+      var hasOverflow = panels.scrollWidth > panels.clientWidth + 4;
+      arrowRight.classList.toggle('work-section__arrow--hidden', atEnd || !hasOverflow);
+    }
+    panels.addEventListener('scroll', updateArrows, { passive: true });
+    arrowLeft.addEventListener('click', function(e) { e.stopPropagation(); panels.scrollBy({ left: -420, behavior: 'smooth' }); });
+    arrowRight.addEventListener('click', function(e) { e.stopPropagation(); panels.scrollBy({ left: 420, behavior: 'smooth' }); });
+    updateArrows();
+  }
+
+  function open(section) {
+    openSection = section;
+    var panels = section.querySelector('[data-panels]');
+    if (!panels) return;
+    section.classList.add('is-open');
+    requestAnimationFrame(function() {
+      var h = panels.scrollHeight;
+      panels.style.maxHeight = (h + 48) + 'px';
+      panels.dispatchEvent(new Event('scroll'));
+    });
+    setTimeout(function() {
+      var rect = section.getBoundingClientRect();
+      var target = window.scrollY + rect.top - window.innerHeight / 2 + rect.height / 2;
+      if (window.lenis && window.lenis.scrollTo) window.lenis.scrollTo(target, { duration: 1.2 });
+      else window.scrollTo({ top: target, behavior: 'smooth' });
+    }, 250);
+  }
+
+  function close(section) {
+    section.classList.remove('is-open');
+    if (openSection === section) openSection = null;
+    var panels = section.querySelector('[data-panels]');
+    if (!panels) return;
+    panels.style.maxHeight = '0';
+    panels.scrollLeft = 0;
+    setTimeout(function() { panels.style.maxHeight = ''; }, 400);
+  }
+
+  sections.forEach(bindClick);
+
+  function poll() {
+    if (openSection) {
+      var rect = openSection.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) close(openSection);
+    }
+    requestAnimationFrame(poll);
+  }
+  requestAnimationFrame(poll);
+})();
+</script>

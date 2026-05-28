@@ -1,0 +1,56 @@
+{
+  "name": "Films for empty rooms",
+  "tagline": "Creative production company.",
+  "address": "Montréal",
+  "email": "contact@filmsforemptyrooms.com",
+  "instagram": "https://instagram.com/filmsforemptyrooms",
+  "reelVimeoId": null,
+  "aboutText": "Films for empty rooms est une maison de production independante basee a Montreal. Nous accompagnons des realisatrices et realisateurs dont le regard singulier transforme chaque projet en une experience visuelle memorable.\n\nNotre roster reunit des talents aux ecritures variees — fiction, documentaire, experimental, clip — unis par une meme exigence du cadre et du recit.\n\nNous croyons que les plus belles images naissent de la confiance entre un auteur et son producteur. C'est cette confiance que nous construisons, projet apres projet.",
+  "eps": [
+    {
+      "name": "Thomas Jabouley",
+      "role": "Directeur executif",
+      "email": "thomas@filmsforemptyrooms.com",
+      "tel": "+1 514 555 0100"
+    }
+  ],
+  "offices": [
+    {
+      "label": "Montréal",
+      "address": "5455 Avenue de Gaspé, Montréal, QC H2T 3B3",
+      "email": "contact@filmsforemptyrooms.com",
+      "tel": "+1 514 555 0100"
+    }
+  ],
+  "production": [
+    {
+      "name": "Thomas Jabouley",
+      "role": "Producteur",
+      "email": "thomas@filmsforemptyrooms.com",
+      "tel": "+1 514 555 0100"
+    }
+  ],
+  "postProduction": [
+    {
+      "name": "Sophie Marchand",
+      "role": "Superviseure post-production",
+      "email": "sophie@filmsforemptyrooms.com",
+      "tel": "+1 514 555 0101"
+    }
+  ],
+  "accounting": {
+    "email": "comptabilite@filmsforemptyrooms.com",
+    "tel": "+1 514 555 0102"
+  },
+  "jobs": {
+    "text": "Nous sommes toujours a la recherche de nouveaux talents. Envoyez-nous votre portfolio et une courte presentation.",
+    "email": "jobs@filmsforemptyrooms.com"
+  },
+  "legal": {
+    "entity": "Films for empty rooms Inc.",
+    "registration": "NEQ 1234567890",
+    "privacy": "Ce site utilise des cookies techniques necessaires a son fonctionnement. Aucune donnee personnelle n'est collectee sans consentement explicite."
+  },
+  "awards": "Lion d'Or Cannes 2024 — Grand Prix Clermont-Ferrand 2022 — Prix du Meilleur Court Metrage Toronto 2023",
+  "linkedin": "https://linkedin.com/company/filmsforemptyrooms"
+}

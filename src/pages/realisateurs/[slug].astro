@@ -1,0 +1,346 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import directors from '../../data/directors.json';
+import WorkSection from '../../components/WorkSection.astro';
+
+export function getStaticPaths() {
+  return directors.map((d) => ({ params: { slug: d.slug } }));
+}
+
+const { slug } = Astro.params;
+const director = directors.find((d) => d.slug === slug);
+if (!director) return Astro.redirect('/404');
+
+const directorOgImage =
+  director.ogImage ||
+  director.homeImages?.[0] ||
+  director.films?.[0]?.stills?.[0] ||
+  director.films?.[0]?.thumbnail ||
+  'https://filmsforemptyrooms.com/og-image.png';
+
+const directorDescription = director.bio.split('\n')[0];
+const canonicalUrl = `https://filmsforemptyrooms.com/realisateurs/${director.slug}`;
+
+const clients = [...new Set(director.films.map((f) => f.client).filter(Boolean))];
+const films = director.films.map((f) => ({
+  ...f,
+  directorName: director.name,
+  directorSlug: director.slug,
+  directorClients: clients,
+  directorInstagram: director.instagram,
+  directorDisciplines: director.disciplines,
+})).sort((a, b) => b.year - a.year);
+---
+
+<Layout
+  title={`${director.name} — Films for Empty Rooms`}
+  description={directorDescription}
+  ogImage={directorOgImage}
+  ogUrl={canonicalUrl}
+  ogType="profile"
+  canonicalUrl={canonicalUrl}
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    'name': director.name,
+    'jobTitle': director.disciplines.join(', '),
+    'url': canonicalUrl,
+    'sameAs': [director.instagram],
+    'worksFor': {
+      '@type': 'Organization',
+      'name': 'Films for Empty Rooms',
+      'url': 'https://filmsforemptyrooms.com'
+    }
+  })} />
+
+  <div class="roster" id="realisateurs">
+    {director.reelVimeoId && (
+      <div class="director-reel">
+        <iframe
+          src={`https://player.vimeo.com/video/${director.reelVimeoId}?h=0&title=0&byline=0&portrait=0&autoplay=1&loop=1&muted=1&background=1`}
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowfullscreen
+          playsinline
+          webkit-playsinline
+        ></iframe>
+      </div>
+    )}
+    <a href="/" class="director-back" data-director-back>&larr; Films for Empty Rooms</a>
+    <div class="director-header">
+      <h1 class="director-name" transition:name={`director-name-${director.slug}`}>{director.name}</h1>
+      {director.instagram && (
+        <a href={director.instagram} target="_blank" rel="noopener noreferrer" class="director-instagram">
+          {director.instagram.replace('https://instagram.com/', '@')} ↗
+        </a>
+      )}
+    </div>
+
+    <div class="director-info">
+      <div class="director-info__row">
+        <span class="director-info__label">Disciplines</span>
+        <span class="director-info__value">{director.disciplines.join(', ')}</span>
+      </div>
+      {director.clients && director.clients.length > 0 && (
+        <div class="director-info__row director-info__row--clients">
+          <span class="director-info__label">Clients</span>
+          <ul class="director-clients">
+            {director.clients.map(client => (
+              <li class="director-clients__item">{client}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {director.cvUrl && (
+        <div class="director-info__row">
+          <span class="director-info__label">CV</span>
+          <a href={director.cvUrl} download class="director-info__link">
+            Télécharger ↓
+          </a>
+        </div>
+      )}
+    </div>
+
+    <div class="ticker" data-ticker data-ticker-original>
+      <div class="ticker__track">
+        <span class="ticker__item">{director.name}</span>
+        {director.disciplines.map((d) => (
+          <span class="ticker__item">{d}</span>
+        ))}
+        <span class="ticker__item"><a href={director.instagram} target="_blank" rel="noopener noreferrer">Instagram</a></span>
+        <span class="ticker__item">{director.name}</span>
+        {director.disciplines.map((d) => (
+          <span class="ticker__item">{d}</span>
+        ))}
+        <span class="ticker__item"><a href={director.instagram} target="_blank" rel="noopener noreferrer">Instagram</a></span>
+      </div>
+    </div>
+
+    {films.map((film) => (
+      <WorkSection film={film} />
+    ))}
+  </div>
+</Layout>
+
+<script>
+(function() {
+  // Reel fade-in
+  var reel = document.querySelector('.director-reel iframe');
+  if (reel) {
+    reel.addEventListener('load', function() {
+      reel.closest('.director-reel').classList.add('is-loaded');
+    });
+  }
+
+  // Restore scroll position
+  try {
+    var saved = sessionStorage.getItem('scrollPosition');
+    if (saved && window.lenis) {
+      window.lenis.scrollTo(parseInt(saved), { immediate: true });
+      sessionStorage.removeItem('scrollPosition');
+    }
+  } catch(e) {}
+
+  // Back link with scroll restore
+  var backLink = document.querySelector('[data-director-back]');
+  if (backLink) {
+    backLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      try { sessionStorage.setItem('restore-scroll', '1'); } catch(e) {}
+      document.body.classList.add('curtain-down');
+      setTimeout(function() {
+        window.location.href = '/';
+      }, 800);
+    });
+  }
+
+  var roster = document.querySelector('.roster');
+  if (!roster) return;
+  var ticker = roster.querySelector('[data-ticker]');
+  if (!ticker) return;
+  var originalSections = Array.from(roster.querySelectorAll('[data-work-section]'));
+
+  var sentinel = document.createElement('div');
+  sentinel.setAttribute('data-sentinel', '');
+  sentinel.style.cssText = 'width:100%;height:1px;';
+  roster.appendChild(sentinel);
+
+  var isMobile = window.innerWidth < 768;
+  var rootMargin = isMobile ? '600px' : '800px';
+  var isInjecting = false;
+
+  // Save ticker HTML for close restore
+  var tickerItems = ticker.querySelectorAll('.ticker__item');
+  var halfCount = Math.floor(tickerItems.length / 2);
+  var directorTickerHTML = '';
+  for (var i = 0; i < halfCount; i++) {
+    directorTickerHTML += tickerItems[i].outerHTML;
+  }
+
+  function setTickerContent(items, isHTML) {
+    var singlePass = isHTML ? items : items.map(function(s) {
+      return '<span class="ticker__item">' + s + '</span>';
+    }).join('');
+    var content = singlePass + singlePass + singlePass + singlePass;
+    var allTickers = roster.querySelectorAll('[data-ticker]');
+    for (var k = 0; k < allTickers.length; k++) {
+      var track = allTickers[k].querySelector('.ticker__track');
+      if (!track) continue;
+      track.style.animation = 'none';
+      track.style.transform = 'translateX(0)';
+      track.innerHTML = content;
+      void track.offsetHeight;
+      track.style.animation = '';
+      track.style.transform = '';
+    }
+  }
+
+  // Initialize ticker with 4x copies for seamless scroll on page load
+  setTickerContent(directorTickerHTML, true);
+
+  // Bandeau logic
+  var openSection = null;
+
+  function bindClick(section) {
+    var trigger = section.querySelector('[data-work-trigger]');
+    var closeBtn = section.querySelector('[data-work-close]');
+    var panels = section.querySelector('[data-panels]');
+    var arrowLeft = section.querySelector('[data-arrow-left]');
+    var arrowRight = section.querySelector('[data-arrow-right]');
+    if (!trigger || !closeBtn || !panels || !arrowLeft || !arrowRight) return;
+
+    trigger.addEventListener('click', function() {
+      if (section.classList.contains('is-open')) { close(section); }
+      else { if (openSection && openSection !== section) close(openSection); open(section); }
+    });
+    closeBtn.addEventListener('click', function(e) { e.stopPropagation(); close(section); });
+
+    function updateArrows() {
+      var atStart = panels.scrollLeft <= 2;
+      var atEnd = panels.scrollLeft + panels.clientWidth >= panels.scrollWidth - 2;
+      arrowLeft.classList.toggle('work-section__arrow--hidden', atStart);
+      var hasOverflow = panels.scrollWidth > panels.clientWidth + 4;
+      arrowRight.classList.toggle('work-section__arrow--hidden', atEnd || !hasOverflow);
+    }
+    panels.addEventListener('scroll', updateArrows, { passive: true });
+    arrowLeft.addEventListener('click', function(e) { e.stopPropagation(); panels.scrollBy({ left: -420, behavior: 'smooth' }); });
+    arrowRight.addEventListener('click', function(e) { e.stopPropagation(); panels.scrollBy({ left: 420, behavior: 'smooth' }); });
+    updateArrows();
+  }
+
+  function open(section) {
+    // Update aria
+    var trigger = section.querySelector('[data-work-trigger]');
+    if (trigger) trigger.setAttribute('aria-expanded', 'true');
+
+    // Lazy-load Vimeo
+    var iframe = section.querySelector('iframe[data-src]');
+    if (iframe && !iframe.src) iframe.src = iframe.dataset.src;
+
+    openSection = section;
+    var panels = section.querySelector('[data-panels]');
+    if (!panels) return;
+    var ds = section.dataset;
+    setTickerContent([ds.title, ds.director, ds.category, ds.client || '', ds.year, ds.title, ds.director]);
+    section.classList.add('is-open');
+    requestAnimationFrame(function() {
+      var h = panels.scrollHeight;
+      panels.style.maxHeight = (h + 48) + 'px';
+      panels.dispatchEvent(new Event('scroll'));
+    });
+    setTimeout(function() {
+      var rect = section.getBoundingClientRect();
+      var target = window.scrollY + rect.top - window.innerHeight / 2 + rect.height / 2;
+      if (window.lenis) window.lenis.scrollTo(target, { duration: 1.2 });
+      else window.scrollTo({ top: target, behavior: 'smooth' });
+    }, 250);
+  }
+
+  function close(section) {
+    section.classList.remove('is-open');
+    if (openSection === section) openSection = null;
+
+    // Unload Vimeo
+    var iframe = section.querySelector('iframe[data-src]');
+    if (iframe) iframe.src = '';
+
+    setTickerContent(directorTickerHTML, true);
+    var panels = section.querySelector('[data-panels]');
+    if (!panels) return;
+    panels.style.maxHeight = '0';
+    panels.scrollLeft = 0;
+    setTimeout(function() { panels.style.maxHeight = ''; }, 400);
+  }
+
+  originalSections.forEach(bindClick);
+
+  function poll() {
+    if (openSection) {
+      var rect = openSection.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) close(openSection);
+    }
+    requestAnimationFrame(poll);
+  }
+  requestAnimationFrame(poll);
+
+  // Infinite scroll injection (must be last)
+  var cycleCount = 0;
+  var MAX_CYCLES = 10;
+  var injectObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      if (isInjecting) return;
+      if (cycleCount >= MAX_CYCLES) { injectObserver.disconnect(); return; }
+      isInjecting = true;
+      cycleCount++;
+      var isFullNav = cycleCount % 3 === 0;
+
+      if (isFullNav) {
+        var siteNav = document.querySelector('.site-nav');
+        if (siteNav) {
+          var fullNav = siteNav.cloneNode(true);
+          var toggle = fullNav.querySelector('[data-theme-toggle]');
+          if (toggle) toggle.remove();
+          fullNav.querySelectorAll('.site-nav__link').forEach(function(l) { l.style.display = ''; });
+          roster.insertBefore(fullNav, sentinel);
+          var fullLogo = fullNav.querySelector('.site-nav__logo');
+          if (fullLogo) {
+            fullLogo.addEventListener('click', function(e) {
+              e.preventDefault();
+              if (window.lenis) window.lenis.scrollTo(0, { duration: 3.5, easing: function(t) { return 1 - Math.pow(1 - t, 4); } });
+              else window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+          }
+        }
+      } else {
+        var siteLogo = document.querySelector('.site-nav__logo');
+        if (siteLogo) {
+          var logoClone = siteLogo.cloneNode(true);
+          var miniNav = document.createElement('nav');
+          miniNav.className = 'site-nav';
+          miniNav.style.justifyContent = 'flex-start';
+          miniNav.appendChild(logoClone);
+          logoClone.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (window.lenis) window.lenis.scrollTo(0, { duration: 3.5, easing: function(t) { return 1 - Math.pow(1 - t, 4); } });
+            else window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+          roster.insertBefore(miniNav, sentinel);
+        }
+      }
+
+      var tickerClone = ticker.cloneNode(true);
+      roster.insertBefore(tickerClone, sentinel);
+      originalSections.forEach(function(s) {
+        var clone = s.cloneNode(true);
+        roster.insertBefore(clone, sentinel);
+        bindClick(clone);
+      });
+
+      isInjecting = false;
+    });
+  }, { rootMargin: rootMargin });
+
+  injectObserver.observe(sentinel);
+})();
+</script>

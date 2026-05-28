@@ -1,0 +1,572 @@
+---
+import '../styles/global.css';
+import studio from '../data/studio.json';
+import { ViewTransitions } from 'astro:transitions';
+
+const { title, hideFooter, description, ogImage, ogUrl, ogType, canonicalUrl } = Astro.props;
+const currentYear = new Date().getFullYear();
+const metaDescription = description || `${studio.name} — ${studio.tagline}`;
+const metaOgImage = ogImage || 'https://filmsforemptyrooms.com/og-image.png';
+const metaOgUrl = ogUrl || `https://filmsforemptyrooms.com${Astro.url.pathname}`;
+const metaOgType = ogType || 'website';
+const metaCanonical = canonicalUrl || `https://filmsforemptyrooms.com${Astro.url.pathname}`;
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://player.vimeo.com" />
+    <link rel="preconnect" href="https://i.vimeocdn.com" />
+    <link rel="preconnect" href="https://f.vimeocdn.com" />
+    <link rel="dns-prefetch" href="https://player.vimeo.com" />
+    <style>
+      html { background: #0a0a0a; }
+      html.light { background: #ffffff; }
+    </style>
+    <script is:inline>
+      (function(){
+        var t = localStorage.getItem('theme');
+        if (t === 'light') {
+          document.documentElement.classList.add('light');
+        }
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFFFFF" />
+    <meta name="description" content={metaDescription} />
+    <meta property="og:title" content={title || studio.name} />
+    <meta property="og:type" content={metaOgType} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:image" content={metaOgImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content={metaOgUrl} />
+    <meta property="og:site_name" content="Films for Empty Rooms" />
+    <link rel="canonical" href={metaCanonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title || studio.name} />
+    <meta name="twitter:description" content={metaDescription} />
+    <meta name="twitter:image" content={metaOgImage} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title || 'Films for Empty Rooms — Production Company Montréal'}</title>
+    <ViewTransitions fallback="animate" />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      'name': studio.name,
+      'url': 'https://filmsforemptyrooms.com',
+      'email': studio.email,
+      'address': {
+        '@type': 'PostalAddress',
+        'addressLocality': 'Montréal',
+        'addressCountry': 'CA'
+      },
+      'sameAs': [studio.instagram]
+    })} />
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+    <div id="splash">
+      <span class="splash__text">{studio.name}</span>
+    </div>
+
+    <div id="cursor" class="is-hidden" aria-hidden="true">
+      <span id="cursor-symbol">·</span>
+    </div>
+
+    <nav class="site-nav">
+      <a href="/" class="site-nav__logo" transition:name="site-logo" transition:animate="none">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 90" width="300" height="90" style="display:block;">
+          <text x="0" y="32" font-family="Inter, system-ui, sans-serif" font-size="26" font-weight="500" fill="currentColor" letter-spacing="0.08em">FILMS FOR</text>
+          <text x="0" y="68" font-family="Inter, system-ui, sans-serif" font-size="26" font-weight="500" fill="currentColor" letter-spacing="0.08em">EMPTY ROOMS</text>
+        </svg>
+      </a>
+      <div class="site-nav__right">
+        <div class="site-nav__links">
+          <a href="/work" class="site-nav__link">Work</a>
+          <a href="/a-propos" class="site-nav__link">À propos</a>
+          <a href="/contact" class="site-nav__link">Contact</a>
+        </div>
+        <button class="nav-burger" id="nav-burger" aria-label="Menu">≡</button>
+        <button class="site-nav__theme-toggle" aria-label="Basculer le theme" data-theme-toggle>
+          <svg class="theme-icon theme-icon--light" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+          <svg class="theme-icon theme-icon--dark" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <div class="nav-overlay" id="nav-overlay">
+      <button class="nav-overlay__close" id="nav-close">×</button>
+      <nav class="nav-overlay__links">
+        <a href="/work">Work</a>
+        <a href="/a-propos">À propos</a>
+        <a href="/contact">Contact</a>
+      </nav>
+    </div>
+
+    <a id="scroll-logo" href="#" aria-label="Retour en haut">Films for Empty Rooms</a>
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <div class="cookie-banner" data-cookie-banner>
+      <span class="cookie-banner__text">
+        Ce site utilise des cookies techniques necessaires a son fonctionnement.
+      </span>
+      <button class="cookie-banner__btn" data-cookie-accept>Accepter</button>
+    </div>
+
+    {!hideFooter && (
+    <footer class="site-footer">
+      <div class="site-footer__left">
+        <span class="site-footer__name">{studio.name}</span>
+        <span class="site-footer__location">{studio.address}</span>
+      </div>
+      <div class="site-footer__center">
+        <a href={`mailto:${studio.email}`} class="site-footer__link">
+          {studio.email}
+        </a>
+      </div>
+      <div class="site-footer__right">
+        <span class="site-footer__credits">
+          &copy; {currentYear} {studio.name}
+        </span>
+        <a href={studio.instagram} target="_blank" rel="noopener noreferrer" class="site-footer__link">
+          Instagram ↗
+        </a>
+      </div>
+    </footer>
+    )}
+
+    <script type="module">
+      import Lenis from 'lenis';
+      var prefReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var lenis = new Lenis({ duration: prefReduced ? 0 : 1.2, smooth: !prefReduced, easing: function(t) { return 1 - Math.pow(1 - t, 3); } });
+      window.lenis = lenis;
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+    </script>
+
+    <script>
+      // View Transitions — scroll restore
+      document.addEventListener('astro:page-load', function() {
+        var savedPos = sessionStorage.getItem('scrollPosition');
+        if (savedPos && window.location.pathname === '/') {
+          requestAnimationFrame(function() {
+            if (window.lenis && window.lenis.scrollTo) {
+              window.lenis.scrollTo(parseInt(savedPos), { immediate: true });
+            } else {
+              window.scrollTo(0, parseInt(savedPos));
+            }
+            try { sessionStorage.removeItem('scrollPosition'); } catch(e) {}
+          });
+        }
+      });
+
+      // Keyboard navigation detection
+      (function() {
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Tab') document.documentElement.classList.add('using-keyboard');
+        });
+        document.addEventListener('mousedown', function() {
+          document.documentElement.classList.remove('using-keyboard');
+        });
+      })();
+    </script>
+
+    <script>
+      // Mobile nav burger
+      (function() {
+        var burger = document.getElementById('nav-burger');
+        var overlay = document.getElementById('nav-overlay');
+        var close = document.getElementById('nav-close');
+        if (burger && overlay && close) {
+          burger.addEventListener('click', function() { overlay.classList.add('is-open'); });
+          close.addEventListener('click', function() { overlay.classList.remove('is-open'); });
+          overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.classList.remove('is-open'); });
+          // Close overlay when any link inside is clicked
+          overlay.querySelectorAll('a').forEach(function(a) {
+            a.addEventListener('click', function() { overlay.classList.remove('is-open'); });
+          });
+        }
+      })();
+
+      // Splash screen
+      (function() {
+        var splash = document.getElementById('splash');
+        if (!splash) return;
+        var logo = document.querySelector('.site-nav__logo');
+        splash.style.display = 'flex';
+        splash.classList.remove('is-hidden');
+
+        var skip, shown;
+        try { skip = sessionStorage.getItem('skip-splash'); } catch(e) {}
+        try { sessionStorage.removeItem('skip-splash'); } catch(e) {}
+        try { shown = sessionStorage.getItem('splash-shown'); } catch(e) {}
+        var delay = skip ? 100 : (shown ? 1200 : 1500);
+        try { sessionStorage.setItem('splash-shown', '1'); } catch(e) {}
+        setTimeout(function() { splash.classList.add('is-hidden'); }, delay);
+
+        // Click anywhere on splash dismisses it immediately
+        splash.addEventListener('click', function() {
+          splash.classList.add('is-hidden');
+        });
+
+        if (window.location.pathname.replace(/\/$/, '') !== '' && logo) {
+          logo.addEventListener('click', function(e) {
+            e.preventDefault();
+            var href = logo.getAttribute('href');
+            try { sessionStorage.setItem('skip-splash', '1'); } catch(e) {}
+            splash.classList.remove('is-hidden');
+            setTimeout(function() { window.location.href = href; }, 1500);
+          });
+        }
+      })();
+
+      // Nav: logo on home reloads, À propos/Contact no-op on own pages
+      (function() {
+        var path = window.location.pathname.replace(/\/$/, '');
+        if (path === '') {
+          var logo = document.querySelector('.site-nav__logo');
+          if (logo) logo.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.body.classList.add('curtain-down');
+            setTimeout(function() {
+              window.location.href = '/';
+            }, 800);
+          });
+        }
+        document.querySelectorAll('.site-nav__link').forEach(function(link) {
+          var href = link.getAttribute('href');
+          if (href && (href === path || href === '/' + path)) {
+            link.addEventListener('click', function(e) { e.preventDefault(); });
+          }
+        });
+      })();
+
+      // Theme toggle
+      (function() {
+        var toggles = document.querySelectorAll('[data-theme-toggle]');
+        var html = document.documentElement;
+        try {
+          if (localStorage.getItem('theme') === 'light') html.classList.add('light');
+        } catch(e) {}
+        toggles.forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            html.classList.toggle('light');
+            try { localStorage.setItem('theme', html.classList.contains('light') ? 'light' : 'dark'); } catch(e) {}
+          });
+        });
+      })();
+    </script>
+
+    <script>
+      // Share button — copy film URL
+      document.addEventListener('click', function(e) {
+        var shareBtn = e.target.closest('[data-share]');
+        if (!shareBtn) return;
+        e.stopPropagation();
+        var section = shareBtn.closest('[data-work-section]');
+        if (!section) return;
+        var directorSlug = section.dataset.directorSlug || '';
+        var filmSlug = section.dataset.slug || '';
+        var url = 'https://filmsforemptyrooms.com/films/' + directorSlug + '/' + filmSlug;
+
+        var copy = function() {
+          shareBtn.textContent = 'Lien copié ✓';
+          setTimeout(function() { shareBtn.textContent = 'Copier le lien ⊕'; }, 2000);
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(copy).catch(function() {
+            var input = document.createElement('input');
+            input.value = url;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            copy();
+          });
+        } else {
+          var input = document.createElement('input');
+          input.value = url;
+          document.body.appendChild(input);
+          input.select();
+          document.execCommand('copy');
+          document.body.removeChild(input);
+          copy();
+        }
+      });
+
+      // Director link: save scroll + curtain
+      document.addEventListener('click', function(e) {
+        var link = e.target.closest('[data-director-link]');
+        if (!link) return;
+        e.preventDefault();
+        var pos = (window.lenis && typeof window.lenis.scroll === 'number') ? window.lenis.scroll : window.scrollY;
+        try { sessionStorage.setItem('scrollPosition', pos); } catch(e) {}
+        document.body.classList.add('curtain-down');
+        setTimeout(function() {
+          window.location.href = link.href;
+        }, 800);
+      });
+
+      // Projection mode
+      (function() {
+        var exitHint = document.createElement('div');
+        exitHint.id = 'projection-exit';
+        exitHint.textContent = 'Esc — Quitter';
+        document.body.appendChild(exitHint);
+
+        var projectionFrame = null;
+        var originalContainer = null;
+        var originalSrc = null;
+
+        function enterProjection(iframe, container) {
+          projectionFrame = iframe;
+          originalContainer = container;
+          originalSrc = iframe.src;
+          // Add autoplay
+          var url = new URL(iframe.src);
+          url.searchParams.set('autoplay', '1');
+          iframe.src = url.toString();
+          // Move to body
+          document.body.appendChild(iframe);
+          iframe.id = 'projection-iframe';
+          document.body.classList.add('projection-active');
+          requestAnimationFrame(function() {
+            iframe.classList.add('is-visible');
+            exitHint.classList.add('is-visible');
+          });
+        }
+
+        function exitProjection() {
+          if (!projectionFrame) return;
+          projectionFrame.classList.remove('is-visible');
+          exitHint.classList.remove('is-visible');
+          setTimeout(function() {
+            document.body.classList.remove('projection-active');
+            projectionFrame.id = '';
+            projectionFrame.src = originalSrc;
+            if (originalContainer) originalContainer.appendChild(projectionFrame);
+            projectionFrame = null;
+            originalContainer = null;
+            originalSrc = null;
+          }, 300);
+        }
+
+        document.addEventListener('click', function(e) {
+          var btn = e.target.closest('[data-projection-btn]');
+          if (!btn) return;
+          var section = btn.closest('[data-work-section]');
+          var iframe = section.querySelector('iframe');
+          var container = section.querySelector('[data-player-container]');
+          if (iframe && container) enterProjection(iframe, container);
+        });
+
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && projectionFrame) { exitProjection(); return; }
+          if (e.key === 'p' || e.key === 'P') {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            var openSection = document.querySelector('.work-section.is-open');
+            if (!openSection) return;
+            var iframe = openSection.querySelector('iframe');
+            var container = openSection.querySelector('[data-player-container]');
+            if (iframe && container) enterProjection(iframe, container);
+          }
+        });
+
+        // Click outside iframe to exit
+        document.addEventListener('click', function(e) {
+          if (projectionFrame && !e.target.closest('iframe')) {
+            exitProjection();
+          }
+        });
+      })();
+
+      // Scroll logo + drag strips + cookie banner
+      (function() {
+        // Scroll logo
+        var scrollLogo = document.getElementById('scroll-logo');
+        if (scrollLogo) {
+          function checkScroll() {
+            if (window.lenis && typeof window.lenis.scroll === 'number') {
+              if (window.lenis.scroll > 300) scrollLogo.classList.add('is-visible');
+              else scrollLogo.classList.remove('is-visible');
+            }
+            requestAnimationFrame(checkScroll);
+          }
+          scrollLogo.addEventListener('click', function(e) {
+            e.preventDefault();
+            var isHome = window.location.pathname.replace(/\/$/, '') === '';
+            if (isHome) {
+              if (window.lenis && window.lenis.scrollTo) window.lenis.scrollTo(0, { duration: 3.5, easing: function(t) { return 1 - Math.pow(1 - t, 4); } });
+              else window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+              document.body.classList.add('curtain-down');
+              setTimeout(function() {
+                window.location.href = '/';
+              }, 800);
+            }
+          });
+          requestAnimationFrame(checkScroll);
+        }
+
+        // Drag-scroll strips
+        function initStrip(el) {
+          var isDown = false, startX = 0, scrollLeft = 0;
+          el.addEventListener('mousedown', function(e) { isDown = true; el.classList.add('is-dragging'); startX = e.pageX - el.offsetLeft; scrollLeft = el.scrollLeft; });
+          el.addEventListener('mouseleave', function() { isDown = false; el.classList.remove('is-dragging'); });
+          el.addEventListener('mouseup', function() { isDown = false; el.classList.remove('is-dragging'); });
+          el.addEventListener('mousemove', function(e) { if (!isDown) return; e.preventDefault(); var x = e.pageX - el.offsetLeft; el.scrollLeft = scrollLeft - (x - startX) * 1.5; });
+          el.addEventListener('wheel', function(e) {
+            var atStart = el.scrollLeft <= 0;
+            var atEnd = el.scrollLeft >= el.scrollWidth - el.clientWidth - 1;
+            if ((e.deltaY > 0 && atEnd) || (e.deltaY < 0 && atStart)) return;
+            e.preventDefault(); el.scrollLeft += e.deltaY;
+          }, { passive: false });
+        }
+        document.querySelectorAll('[data-strip]').forEach(initStrip);
+
+        // Cookie banner
+        var banner = document.querySelector('[data-cookie-banner]');
+        var accept = document.querySelector('[data-cookie-accept]');
+        if (banner && accept) {
+          var cookiesAccepted;
+          try { cookiesAccepted = localStorage.getItem('cookies-accepted'); } catch(e) {}
+          if (!cookiesAccepted) requestAnimationFrame(function() { banner.classList.add('is-visible'); });
+          accept.addEventListener('click', function() {
+            try { localStorage.setItem('cookies-accepted', 'true'); } catch(e) {}
+            banner.classList.remove('is-visible');
+          });
+        }
+      })();
+    </script>
+
+    <script>
+      // Custom cursor — symbols only
+      (function() {
+        if (window.matchMedia('(hover: none)').matches) return;
+
+        var html = document.documentElement;
+        html.classList.add('has-cursor');
+
+        var cursor = document.getElementById('cursor');
+        var cursorSymbol = document.getElementById('cursor-symbol');
+        if (!cursor || !cursorSymbol) return;
+
+        var mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        var cursorX = mouseX, cursorY = mouseY;
+        var LERP = 0.28;
+        var hasMoved = false;
+
+        document.addEventListener('mousemove', function(e) {
+          if (!hasMoved) { hasMoved = true; cursor.classList.remove('is-hidden'); }
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+          var dx = mouseX - cursorX;
+          var dy = mouseY - cursorY;
+          // Cut lerp when close — avoids micro-jitter
+          if (Math.abs(dx) < 0.3 && Math.abs(dy) < 0.3) {
+            cursorX = mouseX;
+            cursorY = mouseY;
+          } else {
+            cursorX += dx * LERP;
+            cursorY += dy * LERP;
+          }
+          cursor.style.left = cursorX + 'px';
+          cursor.style.top = cursorY + 'px';
+          requestAnimationFrame(animateCursor);
+        }
+        requestAnimationFrame(animateCursor);
+
+        function setSymbol(symbol, hidden) {
+          cursorSymbol.textContent = symbol;
+          var size = '18px';
+          if (symbol === '+' || symbol === '−') size = '24px';
+          else if (symbol === '⊕') size = '20px';
+          else if (symbol === '▶' || symbol === '↓') size = '14px';
+          else if (symbol === '↗' || symbol === '✕') size = '16px';
+          cursorSymbol.style.fontSize = size;
+          if (hidden) cursor.classList.add('is-hidden');
+          else cursor.classList.remove('is-hidden');
+        }
+
+        document.addEventListener('mouseover', function(e) {
+          var t = e.target;
+
+          // Ticker or reel — invisible
+          if (t.closest('[data-ticker]')) { setSymbol('·', true); return; }
+          if (t.closest('.director-reel')) { setSymbol('·', true); return; }
+
+          // Lightbox open — close
+          if (t.closest('.lightbox.is-open')) { setSymbol('✕'); return; }
+
+          // Open work trigger — close
+          if (t.closest('[data-work-trigger]') && t.closest('.is-open')) { setSymbol('−'); return; }
+
+          // Closed work trigger — open
+          if (t.closest('[data-work-trigger]')) { setSymbol('+'); return; }
+
+          // Director link in credits
+          if (t.closest('.work-section__panel-director a')) { setSymbol('→'); return; }
+
+          // Gallery stills
+          if (t.closest('.work-section__panel-stills img')) { setSymbol('⊕'); return; }
+
+          // Share button
+          if (t.closest('[data-share]')) { setSymbol('⊕'); return; }
+
+          // Projection button
+          if (t.closest('[data-projection-btn]')) { setSymbol('▶'); return; }
+
+          // Close button
+          if (t.closest('[data-work-close]')) { setSymbol('−'); return; }
+
+          // Footer mail link
+          if (t.closest('.site-footer a[href^="mailto"]')) { setSymbol('→'); return; }
+
+          // Nav links or Instagram links
+          if (t.closest('nav a') || t.closest('.director-instagram') || t.closest('.work-section__instagram')) { setSymbol('↗'); return; }
+
+          // CV download link
+          if (t.closest('.director-info__link[download]')) { setSymbol('↓'); return; }
+
+          // Director strip name or images
+          if (t.closest('.director-strip__name') || t.closest('.director-strip__images')) { setSymbol('→'); return; }
+
+          // Grid items
+          if (t.closest('.grid-item')) { setSymbol('+'); return; }
+
+          // Arrows — default dot
+          if (t.closest('[data-arrow-left]') || t.closest('[data-arrow-right]')) { setSymbol('·'); return; }
+
+          // Default
+          setSymbol('·');
+        });
+
+        document.addEventListener('mouseleave', function() { cursor.classList.add('is-hidden'); });
+        document.addEventListener('mouseenter', function() { cursor.classList.remove('is-hidden'); });
+      })();
+    </script>
+  </body>
+</html>

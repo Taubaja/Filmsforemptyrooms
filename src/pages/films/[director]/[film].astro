@@ -1,0 +1,177 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import directors from '../../../data/directors.json';
+
+export function getStaticPaths() {
+  return directors.flatMap((director) =>
+    director.films.map((film) => ({
+      params: { director: director.slug, film: film.slug },
+      props: { film, director }
+    }))
+  );
+}
+
+const { film, director } = Astro.props;
+const canonicalUrl = `https://filmsforemptyrooms.com/films/${director.slug}/${film.slug}`;
+
+const filmOgImage =
+  film.stills?.[0] ||
+  film.thumbnail ||
+  director.ogImage ||
+  director.homeImages?.[0] ||
+  'https://filmsforemptyrooms.com/og-image.png';
+
+const otherFilms = director.films.filter((f) => f.slug !== film.slug).slice(0, 3);
+---
+
+<Layout
+  title={`${film.title} — ${director.name} — Films for Empty Rooms`}
+  description={film.synopsis}
+  ogImage={filmOgImage}
+  ogUrl={canonicalUrl}
+  ogType="video.movie"
+  canonicalUrl={canonicalUrl}
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Movie',
+    'name': film.title,
+    'director': {
+      '@type': 'Person',
+      'name': director.name,
+      'url': `https://filmsforemptyrooms.com/realisateurs/${director.slug}`
+    },
+    'dateCreated': film.year.toString(),
+    'description': film.synopsis,
+    'image': filmOgImage,
+    'url': canonicalUrl,
+    'productionCompany': {
+      '@type': 'Organization',
+      'name': 'Films for Empty Rooms',
+      'url': 'https://filmsforemptyrooms.com'
+    },
+    'genre': film.category
+  })} />
+
+  <div class="film-page">
+    <a href="/" class="film-page__back" data-director-back>&larr; Films for Empty Rooms</a>
+
+    <div class="film-player">
+      <iframe
+        src={`https://player.vimeo.com/video/${film.vimeoId}?h=0&title=0&byline=0&portrait=0&color=ffffff`}
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen
+        playsinline
+        webkit-playsinline
+      ></iframe>
+    </div>
+
+    <div class="film-page__content">
+      <div class="film-page__header">
+        <h1 class="film-page__title" transition:name={`film-title-${film.slug}`}>{film.title}</h1>
+        <span class="film-page__year">{film.year}</span>
+      </div>
+
+      <div class="film-page__meta">
+        <a href={`/realisateurs/${director.slug}`} class="film-page__meta-link" data-director-link>{director.name}</a>
+        {film.client && (<> — <span>{film.client}</span></>)}
+        {film.category && (<> — <span>{film.category}</span></>)}
+      </div>
+
+      {film.synopsis && (
+        <div class="film-page__synopsis">
+          <p>{film.synopsis}</p>
+        </div>
+      )}
+
+      <div class="film-page__credits">
+        <div class="film-page__credit">
+          <span class="film-page__credit-label">Réalisateur</span>
+          <span class="film-page__credit-value"><a href={`/realisateurs/${director.slug}`} data-director-link>{director.name}</a> ↗</span>
+        </div>
+        {film.client && (
+          <div class="film-page__credit">
+            <span class="film-page__credit-label">Client</span>
+            <span class="film-page__credit-value">{film.client}</span>
+          </div>
+        )}
+        {film.category && (
+          <div class="film-page__credit">
+            <span class="film-page__credit-label">Catégorie</span>
+            <span class="film-page__credit-value">{film.category}</span>
+          </div>
+        )}
+        <div class="film-page__credit">
+          <span class="film-page__credit-label">Année</span>
+          <span class="film-page__credit-value">{film.year}</span>
+        </div>
+        {film.credits && film.credits.map((c) => (
+          <div class="film-page__credit">
+            <span class="film-page__credit-label">{c.role}</span>
+            <span class="film-page__credit-value">{c.name}</span>
+          </div>
+        ))}
+      </div>
+
+      {film.stills && film.stills.length > 0 && (
+        <div class="film-page__stills-section">
+          <h3 class="film-page__section-title">Galerie</h3>
+          <div class="film-stills">
+            {film.stills.map((still, i) => (
+              <img src={still} alt={`${film.title} — still ${i + 1}`} loading="lazy" class="film-stills__img" />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {otherFilms.length > 0 && (
+        <div class="film-page__next-section">
+          <h3 class="film-page__section-title">Autres films — {director.name.toUpperCase()}</h3>
+          <div class="next-films">
+            {otherFilms.map((f) => (
+              <a href={`/films/${director.slug}/${f.slug}`} class="next-film" data-director-link>
+                <div class="next-film__img">
+                  <img src={f.thumbnail} alt={f.title} loading="lazy" />
+                </div>
+                <p class="next-film__client">{f.client}</p>
+                <p class="next-film__title">{f.title}</p>
+                <p class="next-film__year">{f.year}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+</Layout>
+
+<script>
+  (function() {
+    var backLink = document.querySelector('[data-director-back]');
+    if (backLink) {
+      backLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.body.classList.add('curtain-down');
+        setTimeout(function() {
+          window.location.href = '/';
+        }, 800);
+      });
+    }
+
+    // Lightbox for stills
+    var lightbox = document.createElement('div');
+    lightbox.className = 'lightbox';
+    lightbox.innerHTML = '<img src="" alt="" />';
+    lightbox.addEventListener('click', function() { lightbox.classList.remove('is-open'); });
+    document.body.appendChild(lightbox);
+
+    document.addEventListener('click', function(e) {
+      var img = e.target.closest('.film-stills__img');
+      if (!img) return;
+      var lbImg = lightbox.querySelector('img');
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lightbox.classList.add('is-open');
+    });
+  })();
+</script>

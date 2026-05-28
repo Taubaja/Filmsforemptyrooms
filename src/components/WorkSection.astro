@@ -1,0 +1,102 @@
+---
+const { film } = Astro.props;
+---
+
+<section class="work-section" data-work-section data-slug={film.slug} data-category={film.category} data-title={film.title} data-director={film.directorName} data-director-slug={film.directorSlug} data-client={film.client} data-year={String(film.year)} data-thumbnail={film.thumbnail || ''} data-stills={JSON.stringify(film.stills || [])}>
+  <div class="work-section__row">
+    <button class="work-section__trigger" data-work-trigger aria-expanded="false" aria-controls={`panel-${film.slug}`}>
+      <span class="work-section__title-wrap">
+        <span class="work-section__title" transition:name={`film-title-${film.slug}`}>{film.title}</span>
+        <span class="work-section__year">{film.year}</span>
+      </span>
+    </button>
+    <button class="work-section__close" data-work-close aria-label="Fermer le bandeau">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <line x1="1" y1="1" x2="13" y2="13" />
+        <line x1="13" y1="1" x2="1" y2="13" />
+      </svg>
+    </button>
+
+    <div class="work-section__panels" data-panels id={`panel-${film.slug}`} role="region" aria-label={`Détails — ${film.title}`}>
+      <div class="work-section__panel">
+        <div class="work-section__panel-inner">
+          <p class="work-section__panel-client">{film.client}</p>
+          <p class="work-section__panel-synopsis">{film.synopsis}</p>
+          <a href={`/films/${film.directorSlug}/${film.slug}`} class="work-section__permalink" data-director-link>
+            Page complète ↗
+          </a>
+          <button class="work-section__share" data-share aria-label="Copier le lien">
+            Copier le lien ⊕
+          </button>
+        </div>
+      </div>
+
+      <div class="work-section__panel">
+        <div class="work-section__panel-inner">
+          <p class="work-section__panel-label">Fiche technique</p>
+          <p class="work-section__panel-director"><a href={`/realisateurs/${film.directorSlug}`} class="director-link" data-director-link transition:name={`director-name-${film.directorSlug}`}>{film.directorName}</a></p>
+          {film.directorDisciplines && film.directorDisciplines.length > 0 && (
+            <p class="work-section__panel-disciplines">{film.directorDisciplines.join(' · ')}</p>
+          )}
+          {film.directorInstagram && (
+            <a href={film.directorInstagram} target="_blank" rel="noopener noreferrer" class="work-section__instagram">
+              {film.directorInstagram.replace('https://instagram.com/', '@')} ↗
+            </a>
+          )}
+          {film.directorClients && film.directorClients.length > 0 && (
+            <p class="work-section__panel-clients">{film.directorClients.join(' — ')}</p>
+          )}
+          {film.client && <p class="work-section__panel-meta">Client : {film.client}</p>}
+          <p class="work-section__panel-meta">Catégorie : <button class="category-tag" data-category-filter={film.category}>{film.category}</button></p>
+          {film.credits && film.credits.length > 0 && (
+            <div class="work-section__panel-credits">
+              {film.credits.map((c) => (
+                <p><span>{c.role}</span> : {c.name}</p>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div class="work-section__panel">
+        <div class="work-section__panel-inner">
+          <p class="work-section__panel-label">Galerie</p>
+          {film.stills && film.stills.length > 0 && (
+            <div class="work-section__panel-stills">
+              {film.stills.map((still, i) => (
+                <img src={still} alt={`${film.title} — still ${i + 1}`} loading="lazy" decoding="async" draggable="false" />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div class="work-section__panel">
+        <div class="work-section__panel-inner">
+          <p class="work-section__panel-label">Trailer</p>
+          <div class="work-section__panel-player" data-player-container>
+            <iframe
+              data-src={`https://player.vimeo.com/video/${film.vimeoId}?h=0&title=0&byline=0&portrait=0`}
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen
+              playsinline
+              webkit-playsinline
+            ></iframe>
+          </div>
+          <button class="projection-btn" data-projection-btn aria-label="Mode projection plein écran">Projection</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="work-section__arrow work-section__arrow--left" data-arrow-left aria-label="Section précédente">
+      <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="10 2 4 8 10 14" />
+      </svg>
+    </button>
+    <button class="work-section__arrow work-section__arrow--right" data-arrow-right aria-label="Section suivante">
+      <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 2 12 8 6 14" />
+      </svg>
+    </button>
+  </div>
+</section>

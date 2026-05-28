@@ -1,0 +1,107 @@
+---
+import Layout from '../layouts/Layout.astro';
+import studio from '../data/studio.json';
+---
+
+<Layout title={`Contact — ${studio.name}`}>
+  <div class="contact-page">
+    <div class="contact-layout">
+      <nav class="contact-nav">
+        <button class="contact-nav__item is-active" data-tab="general">General</button>
+        <button class="contact-nav__item" data-tab="production">Production</button>
+        <button class="contact-nav__item" data-tab="postproduction">Post-Production</button>
+        <button class="contact-nav__item" data-tab="accounting">Accounting</button>
+        <button class="contact-nav__item" data-tab="jobs">Jobs</button>
+        <button class="contact-nav__item" data-tab="legal">Légal</button>
+      </nav>
+
+      <div class="contact-content">
+        <div class="contact-tab is-active" data-tab-content="general">
+          {studio.offices.map((office) => (
+            <div class="contact-block">
+              <p class="contact-block__label">{office.label}</p>
+              <p class="contact-block__text">{office.address}</p>
+              <a class="contact-block__link" href={`mailto:${office.email}`}>{office.email}</a>
+              <a class="contact-block__link" href={`tel:${office.tel}`}>{office.tel}</a>
+            </div>
+          ))}
+        </div>
+
+        <div class="contact-tab" data-tab-content="production">
+          {studio.production.map((p) => (
+            <div class="contact-block">
+              <p class="contact-block__label">{p.role}</p>
+              <p class="contact-block__text">{p.name}</p>
+              <a class="contact-block__link" href={`mailto:${p.email}`}>{p.email}</a>
+              <a class="contact-block__link" href={`tel:${p.tel}`}>{p.tel}</a>
+            </div>
+          ))}
+        </div>
+
+        <div class="contact-tab" data-tab-content="postproduction">
+          {studio.postProduction.map((p) => (
+            <div class="contact-block">
+              <p class="contact-block__label">{p.role}</p>
+              <p class="contact-block__text">{p.name}</p>
+              <a class="contact-block__link" href={`mailto:${p.email}`}>{p.email}</a>
+              <a class="contact-block__link" href={`tel:${p.tel}`}>{p.tel}</a>
+            </div>
+          ))}
+        </div>
+
+        <div class="contact-tab" data-tab-content="accounting">
+          {studio.accounting && (
+            <div class="contact-block">
+              <p class="contact-block__label">Comptabilité</p>
+              <a class="contact-block__link" href={`mailto:${studio.accounting.email}`}>{studio.accounting.email}</a>
+              <a class="contact-block__link" href={`tel:${studio.accounting.tel}`}>{studio.accounting.tel}</a>
+            </div>
+          )}
+        </div>
+
+        <div class="contact-tab" data-tab-content="jobs">
+          <div class="contact-block">
+            <p class="contact-block__label">Rejoignez-nous</p>
+            <p class="contact-block__text">{studio.jobs.text}</p>
+            <a class="contact-block__link" href={`mailto:${studio.jobs.email}`}>{studio.jobs.email}</a>
+          </div>
+        </div>
+
+        <div class="contact-tab" data-tab-content="legal">
+          <div class="contact-block">
+            <p class="contact-block__label">Entité légale</p>
+            <p class="contact-block__text">{studio.legal.entity}</p>
+            <p class="contact-block__text">NEQ : {studio.legal.registration}</p>
+          </div>
+          <div class="contact-block">
+            <p class="contact-block__label">Confidentialité</p>
+            <p class="contact-block__text">{studio.legal.privacy}</p>
+          </div>
+        </div>
+
+        <div class="contact-editorial">
+          <p class="contact-editorial__text">{studio.name} est une maison de production basee a {studio.address}. {studio.awards && studio.awards}</p>
+          <div class="contact-editorial__social">
+            <a href={studio.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+            {studio.linkedin && <a href={studio.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const tabs = document.querySelectorAll('[data-tab]');
+  const contents = document.querySelectorAll('[data-tab-content]');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('is-active'));
+      tab.classList.add('is-active');
+      contents.forEach(c => c.classList.remove('is-active'));
+      const target = document.querySelector(`[data-tab-content="${tab.dataset.tab}"]`);
+      if (target) target.classList.add('is-active');
+    });
+  });
+</script>
