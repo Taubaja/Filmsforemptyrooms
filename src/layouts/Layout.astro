@@ -221,17 +221,14 @@ const metaCanonical = canonicalUrl || `https://filmsforemptyrooms.com${Astro.url
         }
       })();
 
-      // Nav: logo on home reloads, À propos/Contact no-op on own pages
+      // Nav: logo on home toggles grid/list, À propos/Contact no-op on own pages
       (function() {
         var path = window.location.pathname.replace(/\/$/, '');
         if (path === '') {
           var logo = document.querySelector('.site-nav__logo');
           if (logo) logo.addEventListener('click', function(e) {
             e.preventDefault();
-            document.body.classList.add('curtain-down');
-            setTimeout(function() {
-              window.location.href = '/';
-            }, 800);
+            document.dispatchEvent(new CustomEvent('ffr:toggle-view'));
           });
         }
         document.querySelectorAll('.site-nav__link').forEach(function(link) {
@@ -488,6 +485,7 @@ const metaCanonical = canonicalUrl || `https://filmsforemptyrooms.com${Astro.url
           else if (symbol === '⊕') size = '20px';
           else if (symbol === '▶' || symbol === '↓') size = '14px';
           else if (symbol === '↗' || symbol === '✕') size = '16px';
+          else if (symbol === '·') size = '24px';
           cursorSymbol.style.fontSize = size;
           if (hidden) cursor.classList.add('is-hidden');
           else cursor.classList.remove('is-hidden');
