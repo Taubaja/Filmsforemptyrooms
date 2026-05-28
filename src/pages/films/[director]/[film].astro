@@ -68,7 +68,7 @@ const otherFilms = director.films.filter((f) => f.slug !== film.slug).slice(0, 3
 
     <div class="film-page__content">
       <div class="film-page__header">
-        <h1 class="film-page__title" transition:name={`film-title-${film.slug}`}>{film.title}</h1>
+        <h1 class="film-page__title">{film.title}</h1>
         <span class="film-page__year">{film.year}</span>
       </div>
 

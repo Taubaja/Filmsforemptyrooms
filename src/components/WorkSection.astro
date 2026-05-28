@@ -6,7 +6,7 @@ const { film } = Astro.props;
   <div class="work-section__row">
     <button class="work-section__trigger" data-work-trigger aria-expanded="false" aria-controls={`panel-${film.slug}`}>
       <span class="work-section__title-wrap">
-        <span class="work-section__title" transition:name={`film-title-${film.slug}`}>{film.title}</span>
+        <span class="work-section__title">{film.title}</span>
         <span class="work-section__year">{film.year}</span>
       </span>
     </button>
@@ -34,7 +34,7 @@ const { film } = Astro.props;
       <div class="work-section__panel">
         <div class="work-section__panel-inner">
           <p class="work-section__panel-label">Fiche technique</p>
-          <p class="work-section__panel-director"><a href={`/realisateurs/${film.directorSlug}`} class="director-link" data-director-link transition:name={`director-name-${film.directorSlug}`}>{film.directorName}</a></p>
+          <p class="work-section__panel-director"><a href={`/realisateurs/${film.directorSlug}`} class="director-link" data-director-link>{film.directorName}</a></p>
           {film.directorDisciplines && film.directorDisciplines.length > 0 && (
             <p class="work-section__panel-disciplines">{film.directorDisciplines.join(' · ')}</p>
           )}

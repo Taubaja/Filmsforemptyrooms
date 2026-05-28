@@ -90,8 +90,7 @@ const totalFilmCount = allFilms.length;
   roster.appendChild(sentinel);
 
   var isMobile = window.innerWidth < 768;
-  var rootMargin = isMobile ? '600px' : '800px';
-  var isInjecting = false;
+  var rootMargin = isMobile ? '800px' : '1200px';
 
   // Save studio ticker HTML for bandeau close restore
   var tickerItems = ticker.querySelectorAll('.ticker__item');
@@ -453,13 +452,9 @@ const totalFilmCount = allFilms.length;
 
   // Infinite scroll injection (must be last — uses functions defined above)
   var cycleCount = 0;
-  var MAX_CYCLES = 10;
   var injectObserver = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (!entry.isIntersecting) return;
-      if (isInjecting) return;
-      if (cycleCount >= MAX_CYCLES) { injectObserver.disconnect(); return; }
-      isInjecting = true;
       cycleCount++;
       var isFullNav = cycleCount % 3 === 0;
 
@@ -516,8 +511,6 @@ const totalFilmCount = allFilms.length;
           addGridItem(s, gridItemCount);
         });
       }
-
-      isInjecting = false;
     });
   }, { rootMargin: rootMargin });
 

@@ -65,7 +65,15 @@
       "PowerShell(git init *)",
       "PowerShell(gh auth *)",
       "PowerShell(gh repo *)",
-      "PowerShell(git *)"
+      "PowerShell(git *)",
+      "PowerShell(git push *)",
+      "PowerShell($h = Invoke-WebRequest -Uri \"http://localhost:4321/\" -UseBasicParsing; Write-Output \"Home: $\\($h.StatusCode\\)\"; Write-Output \"splash fix: $\\( -not \\($h.Content -match 'skip-splash'\\)\\)\"; Write-Output \"Pages: $\\(\\(Invoke-WebRequest -Uri 'http://localhost:4321/work' -UseBasicParsing\\).StatusCode\\) $\\(\\(Invoke-WebRequest -Uri 'http://localhost:4321/a-propos' -UseBasicParsing\\).StatusCode\\) $\\(\\(Invoke-WebRequest -Uri 'http://localhost:4321/contact' -UseBasicParsing\\).StatusCode\\)\")",
+      "PowerShell($pages = @\\(\"/\", \"/work\", \"/a-propos\", \"/contact\", \"/realisateurs/sophie-marchand\", \"/films/sophie-marchand/brumes-du-soir\"\\); foreach \\($p in $pages\\) { $res = Invoke-WebRequest -Uri \"http://localhost:4321$p\" -UseBasicParsing; Write-Output \"$p : $\\($res.StatusCode\\)\" }; Write-Output \"---\"; $h = Invoke-WebRequest -Uri \"http://localhost:4321/\" -UseBasicParsing; Write-Output \"no ViewTransitions: $\\( -not \\($h.Content -match 'astro:transitions'\\)\\)\"; Write-Output \"no transition:name: $\\( -not \\($h.Content -match 'transition:name'\\)\\)\"; Write-Output \"splash normal: $\\($h.Content -match 'skip-splash'\\)\")",
+      "PowerShell($h = Invoke-WebRequest -Uri \"http://localhost:4321/\" -UseBasicParsing; Write-Output \"splash restored: $\\($h.Content -match 'skip-splash'\\)\")",
+      "PowerShell($js = Invoke-WebRequest -Uri \"http://localhost:4321/src/layouts/Layout.astro?astro&type=script&index=2&lang.ts\" -UseBasicParsing; Write-Output \"splash: $\\($js.Content -match 'skip-splash'\\)\")",
+      "PowerShell($dp = Invoke-WebRequest -Uri \"http://localhost:4321/src/pages/realisateurs/[slug].astro?astro&type=script&index=0&lang.ts\" -UseBasicParsing; Write-Output \"MAX_CYCLES: $\\($dp.Content -match 'MAX_CYCLES'\\)\"; Write-Output \"isInjecting: $\\($dp.Content -match 'isInjecting'\\)\")",
+      "PowerShell($hp = Invoke-WebRequest -Uri \"http://localhost:4321/src/pages/index.astro?astro&type=script&index=0&lang.ts\" -UseBasicParsing; $dp = Invoke-WebRequest -Uri \"http://localhost:4321/src/pages/realisateurs/[slug].astro?astro&type=script&index=0&lang.ts\" -UseBasicParsing; Write-Output \"HP MAX_CYCLES: $\\($hp.Content -match 'MAX_CYCLES'\\)\"; Write-Output \"HP isInjecting: $\\($hp.Content -match 'isInjecting'\\)\"; Write-Output \"DP MAX_CYCLES: $\\($dp.Content -match 'MAX_CYCLES'\\)\"; Write-Output \"DP isInjecting: $\\($dp.Content -match 'isInjecting'\\)\")",
+      "PowerShell(Write-Output \"Home: \" \\(Invoke-WebRequest -Uri \"http://localhost:4321/\" -UseBasicParsing\\).StatusCode; Write-Output \"Dir: \" \\(Invoke-WebRequest -Uri \"http://localhost:4321/realisateurs/sophie-marchand\" -UseBasicParsing\\).StatusCode)"
     ]
   }
 }

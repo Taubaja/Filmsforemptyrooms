@@ -1,7 +1,6 @@
 ---
 import '../styles/global.css';
 import studio from '../data/studio.json';
-import { ViewTransitions } from 'astro:transitions';
 
 const { title, hideFooter, description, ogImage, ogUrl, ogType, canonicalUrl } = Astro.props;
 const currentYear = new Date().getFullYear();
@@ -49,7 +48,6 @@ const metaCanonical = canonicalUrl || `https://filmsforemptyrooms.com${Astro.url
     <meta name="twitter:image" content={metaOgImage} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title || 'Films for Empty Rooms — Production Company Montréal'}</title>
-    <ViewTransitions fallback="animate" />
     <script type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'Organization',
@@ -75,7 +73,7 @@ const metaCanonical = canonicalUrl || `https://filmsforemptyrooms.com${Astro.url
     </div>
 
     <nav class="site-nav">
-      <a href="/" class="site-nav__logo" transition:name="site-logo" transition:animate="none">
+      <a href="/" class="site-nav__logo">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 90" width="300" height="90" style="display:block;">
           <text x="0" y="32" font-family="Inter, system-ui, sans-serif" font-size="26" font-weight="500" fill="currentColor" letter-spacing="0.08em">FILMS FOR</text>
           <text x="0" y="68" font-family="Inter, system-ui, sans-serif" font-size="26" font-weight="500" fill="currentColor" letter-spacing="0.08em">EMPTY ROOMS</text>
@@ -164,21 +162,6 @@ const metaCanonical = canonicalUrl || `https://filmsforemptyrooms.com${Astro.url
     </script>
 
     <script>
-      // View Transitions — scroll restore
-      document.addEventListener('astro:page-load', function() {
-        var savedPos = sessionStorage.getItem('scrollPosition');
-        if (savedPos && window.location.pathname === '/') {
-          requestAnimationFrame(function() {
-            if (window.lenis && window.lenis.scrollTo) {
-              window.lenis.scrollTo(parseInt(savedPos), { immediate: true });
-            } else {
-              window.scrollTo(0, parseInt(savedPos));
-            }
-            try { sessionStorage.removeItem('scrollPosition'); } catch(e) {}
-          });
-        }
-      });
-
       // Keyboard navigation detection
       (function() {
         document.addEventListener('keydown', function(e) {
@@ -223,7 +206,6 @@ const metaCanonical = canonicalUrl || `https://filmsforemptyrooms.com${Astro.url
         try { sessionStorage.setItem('splash-shown', '1'); } catch(e) {}
         setTimeout(function() { splash.classList.add('is-hidden'); }, delay);
 
-        // Click anywhere on splash dismisses it immediately
         splash.addEventListener('click', function() {
           splash.classList.add('is-hidden');
         });

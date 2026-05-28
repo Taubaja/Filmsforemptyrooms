@@ -68,7 +68,7 @@ const films = director.films.map((f) => ({
     )}
     <a href="/" class="director-back" data-director-back>&larr; Films for Empty Rooms</a>
     <div class="director-header">
-      <h1 class="director-name" transition:name={`director-name-${director.slug}`}>{director.name}</h1>
+      <h1 class="director-name">{director.name}</h1>
       {director.instagram && (
         <a href={director.instagram} target="_blank" rel="noopener noreferrer" class="director-instagram">
           {director.instagram.replace('https://instagram.com/', '@')} ↗
@@ -166,8 +166,7 @@ const films = director.films.map((f) => ({
   roster.appendChild(sentinel);
 
   var isMobile = window.innerWidth < 768;
-  var rootMargin = isMobile ? '600px' : '800px';
-  var isInjecting = false;
+  var rootMargin = isMobile ? '800px' : '1200px';
 
   // Save ticker HTML for close restore
   var tickerItems = ticker.querySelectorAll('.ticker__item');
@@ -285,13 +284,9 @@ const films = director.films.map((f) => ({
 
   // Infinite scroll injection (must be last)
   var cycleCount = 0;
-  var MAX_CYCLES = 10;
   var injectObserver = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (!entry.isIntersecting) return;
-      if (isInjecting) return;
-      if (cycleCount >= MAX_CYCLES) { injectObserver.disconnect(); return; }
-      isInjecting = true;
       cycleCount++;
       var isFullNav = cycleCount % 3 === 0;
 
@@ -336,8 +331,6 @@ const films = director.films.map((f) => ({
         roster.insertBefore(clone, sentinel);
         bindClick(clone);
       });
-
-      isInjecting = false;
     });
   }, { rootMargin: rootMargin });
 
