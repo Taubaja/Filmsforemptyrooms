@@ -77,7 +77,8 @@
       "PowerShell($h = Invoke-WebRequest -Uri \"http://localhost:4321/\" -UseBasicParsing; $f = Invoke-WebRequest -Uri \"http://localhost:4321/films/sophie-marchand/brumes-du-soir\" -UseBasicParsing; Write-Output \"Home: $\\($h.StatusCode\\)\"; Write-Output \"Film: $\\($f.StatusCode\\)\"; Write-Output \"lightbox__prev: $\\($h.Content -match 'lightbox__prev'\\)\"; Write-Output \"lightbox__counter: $\\($h.Content -match 'lightbox__counter'\\)\"; Write-Output \"cursor 24px: $\\($h.Content -match '24px'\\)\"; Write-Output \"lbImages: $\\($h.Content -match 'lbImages'\\)\")",
       "PowerShell($d = Invoke-WebRequest -Uri \"http://localhost:4321/realisateurs/sophie-marchand\" -UseBasicParsing; Write-Output \"Status: $\\($d.StatusCode\\)\"; Write-Output \"injectObserver: $\\($d.Content -match 'injectObserver'\\)\")",
       "PowerShell($hp = Invoke-WebRequest -Uri \"http://localhost:4321/src/pages/index.astro?astro&type=script&index=0&lang.ts\" -UseBasicParsing; Write-Output \"ffr:toggle-view in HP: $\\($hp.Content -match 'ffr:toggle-view'\\)\"; $l = Invoke-WebRequest -Uri \"http://localhost:4321/src/layouts/Layout.astro?astro&type=script&index=1&lang.ts\" -UseBasicParsing; Write-Output \"ffr:toggle-view in Layout: $\\($l.Content -match 'ffr:toggle-view'\\)\"; Write-Output 'Page: ' \\(Invoke-WebRequest -Uri 'http://localhost:4321/' -UseBasicParsing\\).StatusCode)",
-      "PowerShell(Write-Output 'Page: ' \\(Invoke-WebRequest -Uri 'http://localhost:4321/' -UseBasicParsing\\).StatusCode)"
+      "PowerShell(Write-Output 'Page: ' \\(Invoke-WebRequest -Uri 'http://localhost:4321/' -UseBasicParsing\\).StatusCode)",
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); cd \"$env:USERPROFILE\\\\Desktop\\\\deepseek\\\\Filmsforemptyrooms\"; git status --short 2>&1)"
     ]
   }
 }
